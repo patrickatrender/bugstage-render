@@ -22,8 +22,27 @@ repo holds only the deploy config.
   (clear the build cache) to upgrade.
 - Data lives on a 5 GB persistent disk at `/pb_data`. Back it up from the PocketBase dashboard.
 
+## Git over SSH
+
+Render web services expose only HTTP(S), so BugStage's SSH server can't be reached
+directly. This template adds a `/_ssh` route that tunnels SSH over a WebSocket on the
+normal HTTPS port (see `patches/ssh_tunnel.go`). BugStage's own SSH server still handles
+key checks and pushes.
+
+One-time client setup:
+
+1. Install [websocat](https://github.com/vi/websocat) (`brew install websocat`).
+2. Add to `~/.ssh/config`:
+   ```
+   Host <service>.onrender.com
+     ProxyCommand websocat --binary wss://%h/_ssh
+     ServerAliveInterval 30
+   ```
+3. Register your public key in BugStage (user settings > SSH keys), then use the SSH
+   remote shown on the repository page.
+
+Clone and fetch also work over plain HTTPS: `https://<service>.onrender.com/git/<project>/<repo>`.
+
 ## Limitations on Render
 
-- **Git push over SSH is not available.** Render web services expose only HTTP(S), so the
-  SSH server on port 8022 is unreachable from outside. Clone over HTTPS works.
 - A persistent disk means one instance only, and deploys have a few seconds of downtime.
