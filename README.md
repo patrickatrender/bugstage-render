@@ -7,10 +7,12 @@ repo holds only the deploy config.
 ## Deploy
 
 1. Click **Deploy to Render** (or open `https://dashboard.render.com/blueprint/new?repo=<this repo URL>`).
-2. After the first deploy, open the service logs and find the PocketBase installer link
-   (`http://0.0.0.0:PORT/_/#/pbinstal/...`). Replace `http://0.0.0.0:PORT` with your
-   `https://<service>.onrender.com` URL and create the superuser. This also creates the
-   first Maintainer account.
+2. No browser opens on a server. After the first deploy, open the service logs and find
+   the line after "Launch the URL below in the browser": it looks like
+   `http://0.0.0.0:10000/_/#/pbinstall/<token>`. Replace `http://0.0.0.0:10000` with your
+   `https://<service>.onrender.com` URL, open it, and create the superuser. This also
+   creates the first Maintainer account. The token expires about 2 hours after the
+   service starts; restart the service to print a fresh one.
 3. In the PocketBase dashboard (`/_/`), set **Settings > Application > Application URL** to
    your public URL.
 
