@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: bugstage
+    runtime: docker
+    plan: standard
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    envVars:
+      - key: BUGSTAGE_REF        # branch or tag to build, e.g. v0.1.0-rc.4
+        value: master
+    disk:
+      name: pb-data
+      mountPath: /pb_data
+      sizeGB: 5
